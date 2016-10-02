@@ -1,0 +1,66 @@
+﻿@model PUNTOVENTA.Models.venta
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>venta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cliente_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cliente_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.total)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.total)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.credito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.credito)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.creado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.creado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.actualizado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.actualizado)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

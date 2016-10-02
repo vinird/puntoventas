@@ -49,9 +49,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -168,14 +178,61 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\cajasController.cs" />
+    <Compile Include="Controllers\categoria_productoController.cs" />
+    <Compile Include="Controllers\clientesController.cs" />
+    <Compile Include="Controllers\dias_permitidosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\impuestoesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\productoesController.cs" />
+    <Compile Include="Controllers\usuariosController.cs" />
+    <Compile Include="Controllers\ventasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\caja.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\categoria_producto.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cliente.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dias_permitidos.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\impuesto.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ModelPuntoVentas.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelPuntoVentas.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelPuntoVentas.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelPuntoVentas.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelPuntoVentas.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\producto.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usuario.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\venta.cs">
+      <DependentUpon>ModelPuntoVentas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -186,8 +243,25 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\ModelPuntoVentas.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModelPuntoVentas.edmx</DependentUpon>
+      <LastGenOutput>ModelPuntoVentas.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ModelPuntoVentas.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModelPuntoVentas.edmx</DependentUpon>
+      <LastGenOutput>ModelPuntoVentas.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\ModelPuntoVentas.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModelPuntoVentas.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ModelPuntoVentas.edmx.diagram">
+      <DependentUpon>ModelPuntoVentas.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -234,6 +308,46 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\dias_permitidos\Create.cshtml" />
+    <Content Include="Views\dias_permitidos\Delete.cshtml" />
+    <Content Include="Views\dias_permitidos\Details.cshtml" />
+    <Content Include="Views\dias_permitidos\Edit.cshtml" />
+    <Content Include="Views\dias_permitidos\Index.cshtml" />
+    <Content Include="Views\cajas\Create.cshtml" />
+    <Content Include="Views\cajas\Delete.cshtml" />
+    <Content Include="Views\cajas\Details.cshtml" />
+    <Content Include="Views\cajas\Edit.cshtml" />
+    <Content Include="Views\cajas\Index.cshtml" />
+    <Content Include="Views\clientes\Create.cshtml" />
+    <Content Include="Views\clientes\Delete.cshtml" />
+    <Content Include="Views\clientes\Details.cshtml" />
+    <Content Include="Views\clientes\Edit.cshtml" />
+    <Content Include="Views\clientes\Index.cshtml" />
+    <Content Include="Views\ventas\Create.cshtml" />
+    <Content Include="Views\ventas\Delete.cshtml" />
+    <Content Include="Views\ventas\Details.cshtml" />
+    <Content Include="Views\ventas\Edit.cshtml" />
+    <Content Include="Views\ventas\Index.cshtml" />
+    <Content Include="Views\usuarios\Create.cshtml" />
+    <Content Include="Views\usuarios\Delete.cshtml" />
+    <Content Include="Views\usuarios\Details.cshtml" />
+    <Content Include="Views\usuarios\Edit.cshtml" />
+    <Content Include="Views\usuarios\Index.cshtml" />
+    <Content Include="Views\categoria_producto\Create.cshtml" />
+    <Content Include="Views\categoria_producto\Delete.cshtml" />
+    <Content Include="Views\categoria_producto\Details.cshtml" />
+    <Content Include="Views\categoria_producto\Edit.cshtml" />
+    <Content Include="Views\categoria_producto\Index.cshtml" />
+    <Content Include="Views\impuestoes\Create.cshtml" />
+    <Content Include="Views\impuestoes\Delete.cshtml" />
+    <Content Include="Views\impuestoes\Details.cshtml" />
+    <Content Include="Views\impuestoes\Edit.cshtml" />
+    <Content Include="Views\impuestoes\Index.cshtml" />
+    <Content Include="Views\productoes\Create.cshtml" />
+    <Content Include="Views\productoes\Delete.cshtml" />
+    <Content Include="Views\productoes\Details.cshtml" />
+    <Content Include="Views\productoes\Edit.cshtml" />
+    <Content Include="Views\productoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -245,6 +359,9 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

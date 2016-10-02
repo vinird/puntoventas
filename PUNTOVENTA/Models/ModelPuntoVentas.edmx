@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="puntoventaModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="caja">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_inicio" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="fecha_final" Type="datetime" Precision="0" />
+          <Property Name="total" Type="double" />
+        </EntityType>
+        <EntityType Name="categoria_producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contenido" Type="longtext" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cedula" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="8" />
+          <Property Name="direccion" Type="longtext" />
+          <Property Name="deuda" Type="double" />
+          <Property Name="deuda_antigua" Type="date" />
+          <Property Name="creado" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="actualizado" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="dias_permitidos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dias" Type="int" />
+        </EntityType>
+        <EntityType Name="impuesto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="porcentaje" Type="double" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="id_impuesto" Type="int" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contenido" Type="longtext" />
+          <Property Name="precio" Type="double" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="creado" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="actualizado" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="tipo" Type="int" Nullable="false" />
+          <Property Name="creado" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="actualizado" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="venta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuario_id" Type="int" Nullable="false" />
+          <Property Name="cliente_id" Type="int" Nullable="false" />
+          <Property Name="total" Type="double" Nullable="false" />
+          <Property Name="credito" Type="int" Nullable="false" />
+          <Property Name="creado" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="actualizado" Type="datetime" Precision="0" />
+        </EntityType>
+        <Association Name="fk_client">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_category">
+          <End Role="categoria_producto" Type="Self.categoria_producto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria_producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tax">
+          <End Role="impuesto" Type="Self.impuesto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="impuesto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_impuesto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="puntoventaModelStoreContainer">
+          <EntitySet Name="caja" EntityType="Self.caja" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="categoria_producto" EntityType="Self.categoria_producto" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="dias_permitidos" EntityType="Self.dias_permitidos" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="impuesto" EntityType="Self.impuesto" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="puntoventa" store:Type="Tables" />
+          <EntitySet Name="venta" EntityType="Self.venta" Schema="puntoventa" store:Type="Tables" />
+          <AssociationSet Name="fk_client" Association="Self.fk_client">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_category" Association="Self.fk_product_category">
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tax" Association="Self.fk_tax">
+            <End Role="impuesto" EntitySet="impuesto" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user" Association="Self.fk_user">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="puntoventaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="caja">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_final" Type="DateTime" />
+          <Property Name="total" Type="Double" />
+        </EntityType>
+        <EntityType Name="categoria_producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contenido" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="producto" Relationship="Self.fk_product_category" FromRole="categoria_producto" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cedula" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="deuda" Type="Double" />
+          <Property Name="deuda_antigua" Type="DateTime" />
+          <Property Name="creado" Type="DateTime" Nullable="false" />
+          <Property Name="actualizado" Type="DateTime" />
+          <NavigationProperty Name="venta" Relationship="Self.fk_client" FromRole="cliente" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="dias_permitidos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dias" Type="Int32" />
+        </EntityType>
+        <EntityType Name="impuesto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="porcentaje" Type="Double" />
+          <NavigationProperty Name="producto" Relationship="Self.fk_tax" FromRole="impuesto" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="id_impuesto" Type="Int32" Nullable="false" />
+          <Property Name="codigo" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contenido" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="precio" Type="Double" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="creado" Type="DateTime" Nullable="false" />
+          <Property Name="actualizado" Type="DateTime" />
+          <NavigationProperty Name="categoria_producto" Relationship="Self.fk_product_category" FromRole="producto" ToRole="categoria_producto" />
+          <NavigationProperty Name="impuesto" Relationship="Self.fk_tax" FromRole="producto" ToRole="impuesto" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo" Type="Int32" Nullable="false" />
+          <Property Name="creado" Type="DateTime" Nullable="false" />
+          <Property Name="actualizado" Type="DateTime" />
+          <NavigationProperty Name="venta" Relationship="Self.fk_user" FromRole="usuario" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="venta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuario_id" Type="Int32" Nullable="false" />
+          <Property Name="cliente_id" Type="Int32" Nullable="false" />
+          <Property Name="total" Type="Double" Nullable="false" />
+          <Property Name="credito" Type="Int32" Nullable="false" />
+          <Property Name="creado" Type="DateTime" Nullable="false" />
+          <Property Name="actualizado" Type="DateTime" />
+          <NavigationProperty Name="cliente" Relationship="Self.fk_client" FromRole="venta" ToRole="cliente" />
+          <NavigationProperty Name="usuario" Relationship="Self.fk_user" FromRole="venta" ToRole="usuario" />
+        </EntityType>
+        <Association Name="fk_product_category">
+          <End Role="categoria_producto" Type="Self.categoria_producto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria_producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_client">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tax">
+          <End Role="impuesto" Type="Self.impuesto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="impuesto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_impuesto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="puntoventaEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="caja" EntityType="Self.caja" />
+          <EntitySet Name="categoria_producto" EntityType="Self.categoria_producto" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" />
+          <EntitySet Name="dias_permitidos" EntityType="Self.dias_permitidos" />
+          <EntitySet Name="impuesto" EntityType="Self.impuesto" />
+          <EntitySet Name="producto" EntityType="Self.producto" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" />
+          <EntitySet Name="venta" EntityType="Self.venta" />
+          <AssociationSet Name="fk_product_category" Association="Self.fk_product_category">
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_client" Association="Self.fk_client">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tax" Association="Self.fk_tax">
+            <End Role="impuesto" EntitySet="impuesto" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user" Association="Self.fk_user">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="puntoventaModelStoreContainer" CdmEntityContainer="puntoventaEntities1">
+          <EntitySetMapping Name="caja">
+            <EntityTypeMapping TypeName="puntoventaModel.caja">
+              <MappingFragment StoreEntitySet="caja">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_final" ColumnName="fecha_final" />
+                <ScalarProperty Name="total" ColumnName="total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categoria_producto">
+            <EntityTypeMapping TypeName="puntoventaModel.categoria_producto">
+              <MappingFragment StoreEntitySet="categoria_producto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="contenido" ColumnName="contenido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="puntoventaModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="deuda" ColumnName="deuda" />
+                <ScalarProperty Name="deuda_antigua" ColumnName="deuda_antigua" />
+                <ScalarProperty Name="creado" ColumnName="creado" />
+                <ScalarProperty Name="actualizado" ColumnName="actualizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dias_permitidos">
+            <EntityTypeMapping TypeName="puntoventaModel.dias_permitidos">
+              <MappingFragment StoreEntitySet="dias_permitidos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="dias" ColumnName="dias" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="impuesto">
+            <EntityTypeMapping TypeName="puntoventaModel.impuesto">
+              <MappingFragment StoreEntitySet="impuesto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="porcentaje" ColumnName="porcentaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto">
+            <EntityTypeMapping TypeName="puntoventaModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="id_impuesto" ColumnName="id_impuesto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="contenido" ColumnName="contenido" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="creado" ColumnName="creado" />
+                <ScalarProperty Name="actualizado" ColumnName="actualizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario">
+            <EntityTypeMapping TypeName="puntoventaModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="creado" ColumnName="creado" />
+                <ScalarProperty Name="actualizado" ColumnName="actualizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="venta">
+            <EntityTypeMapping TypeName="puntoventaModel.venta">
+              <MappingFragment StoreEntitySet="venta">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="credito" ColumnName="credito" />
+                <ScalarProperty Name="creado" ColumnName="creado" />
+                <ScalarProperty Name="actualizado" ColumnName="actualizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

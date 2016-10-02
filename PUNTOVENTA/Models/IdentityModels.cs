@@ -29,5 +29,21 @@ namespace PUNTOVENTA.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.caja> cajas { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.dias_permitidos> dias_permitidos { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.cliente> clientes { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.venta> ventas { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.usuario> usuarios { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.categoria_producto> categoria_producto { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.impuesto> impuestoes { get; set; }
+
+        public System.Data.Entity.DbSet<PUNTOVENTA.Models.producto> productoes { get; set; }
     }
 }
